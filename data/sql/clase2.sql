@@ -81,3 +81,30 @@ ON tr."AlbumId" = al."AlbumId"
 JOIN "Artist" AS ar
 ON al."ArtistId" = ar."ArtistId"
 ORDER BY "Artista"
+
+
+-- Generar tabla de total de ventas por país.
+
+
+-- Boletas en donde el valor sea mayor que 5 dolares.
+
+SELECT "InvoiceId", "Total"
+FROM "Invoice"
+WHERE "Total" > 5 AND "Total" < 10
+ORDER BY "Total" DESC
+
+-- Generar tabla de total de ventas por país, dejando solo países con ventas mayores a 100.
+
+SELECT "BillingCountry" AS "País", SUM("Total") AS "Ventas totales"
+FROM "Invoice"
+GROUP BY "BillingCountry"
+HAVING SUM("Total") > 100
+ORDER BY "Ventas totales" DESC
+
+-- Encuentra el total de pistas y la duración promedio de las pistas para cada GÉNERO.
+
+SELECT tr."Name" AS "Nombre", gr."Name" AS "Género", SUM("Milliseconds") AS "Duración"
+FROM "Track" AS tr
+JOIN "Genre" AS gr
+ON tr."GenreId" = gr."GenreId"
+GROUP BY tr."GenreId"
