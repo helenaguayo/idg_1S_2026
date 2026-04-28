@@ -108,3 +108,43 @@ FROM "Track" AS tr
 JOIN "Genre" AS gr
 ON tr."GenreId" = gr."GenreId"
 GROUP BY tr."GenreId"
+
+-- ¿Cuánto es el valor promedio de las facturas?
+SELECT AVG("Total") AS "Promedio de facturas"
+FROM "Invoice"
+
+-- Obtener facturas mayores al promedio
+SELECT *
+FROM "Invoice"
+WHERE "Total" > 5.65 -- hardcore
+
+-- Se puede hacer así de mejor manera:
+SELECT *
+FROM "Invoice"
+WHERE "Total" > (SELECT AVG("Total") AS "Promedio de facturas"
+FROM "Invoice")
+
+-- Pistas más largas que el promedio
+SELECT AVG("Milliseconds") AS "Duración promedio de pistas"
+FROM "Track"
+SELECT *
+FROM "Track"
+WHERE "Milliseconds" > (SELECT AVG("Milliseconds") 
+FROM "Track")
+
+-- Encontrar clientes (por ID) que tienen más gastos que el promedio.
+SELECT inv."CustomerId", inv."Total"
+FROM "Customer" AS cus
+JOIN "Invoice" AS inv
+ON cus."CustomerId" = inv."CustomerId"
+GROUP BY inv."CustomerId" > (SELECT AVG("Total")
+FROM "Invoice")
+
+SELECT "CustomerId",SUM("Total")
+FROM "Invoice"
+GROUP BY "CustomerId" 
+HAVING (SUM("Total")) > (SELECT AVG("Total")
+FROM "Invoice")
+
+
+
